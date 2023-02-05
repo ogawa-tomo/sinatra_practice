@@ -1,1 +1,5 @@
-（メモリスト）
+<ul>
+  <% @memos.each do |memo| %>
+    <li><a href='<%= "memos/#{memo}" %>'><%= memo %></a></li>
+  <% end %>
+</ul>
