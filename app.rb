@@ -17,13 +17,14 @@ end
 post '/memos' do
   title = params[:title]
   body = params[:body]
+  create_update_memo(params[:title], params[:body])
 
-  file = File.open("views/#{title}.markdown", 'w')
-  file.puts "## #{title}"
-  file.puts body
-  file.close
+  # file = File.open("views/#{title}.markdown", 'w')
+  # file.puts "## #{title}"
+  # file.puts body
+  # file.close
 
-  redirect to("/memos/#{title}")
+  # redirect to("/memos/#{title}")
 end
 
 get '/memos/:title/edit' do
@@ -34,3 +35,16 @@ get '/memos/:title/edit' do
   file.close
   erb :edit
 end
+
+patch '/memos/:title' do
+  create_update_memo(params[:title], params[:body])
+end
+
+def create_update_memo(title, body)
+  file = File.open("views/#{title}.markdown", 'w')
+  file.puts "## #{title}"
+  file.puts body
+  file.close
+  redirect to("/memos/#{title}")
+end
+
