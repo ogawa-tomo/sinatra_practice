@@ -6,6 +6,10 @@ get '/' do
   erb :index
 end
 
+get '/memos/new' do
+  erb :new
+end
+
 get '/memos/:title' do
   erb :memo_template, :locals => { :md => markdown(params[:title].to_sym) }
 end
