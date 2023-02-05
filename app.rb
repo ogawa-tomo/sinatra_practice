@@ -13,3 +13,15 @@ end
 get '/memos/:title' do
   erb :memo_template, :locals => { :md => markdown(params[:title].to_sym) }
 end
+
+post '/memos' do
+  title = params[:title]
+  body = params[:body]
+
+  file = File.open("views/#{title}.markdown", 'w')
+  file.puts "## #{title}"
+  file.puts body
+  file.close
+
+  redirect to("/memos/#{title}")
+end
