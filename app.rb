@@ -11,6 +11,7 @@ get '/memos/new' do
 end
 
 get '/memos/:title' do
+  @title = params[:title]
   erb :memo_template, :locals => { :md => markdown(params[:title].to_sym) }
 end
 
@@ -42,7 +43,6 @@ end
 
 def create_update_memo(title, body)
   file = File.open("views/#{title}.markdown", 'w')
-  file.puts "## #{title}"
   file.puts body
   file.close
   redirect to("/memos/#{title}")
