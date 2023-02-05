@@ -25,3 +25,12 @@ post '/memos' do
 
   redirect to("/memos/#{title}")
 end
+
+get '/memos/:title/edit' do
+  file_path = "views/#{params[:title]}.markdown"
+  @title = File.basename(Dir.glob(file_path)[0]).chomp('.markdown')
+  file = File.open(file_path, 'r')
+  @body = file.read
+  file.close
+  erb :edit
+end
