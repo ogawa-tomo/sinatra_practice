@@ -16,8 +16,8 @@ get '/memos/:title' do
 end
 
 post '/memos' do
-  title = params[:title]
-  body = params[:body]
+  title = h(params[:title])
+  body = h(params[:body])
   file = File.open("views/#{title}.markdown", 'w')
   file.puts body
   file.close
@@ -35,8 +35,8 @@ end
 
 patch '/memos/:old_title' do
   old_title = params[:old_title]
-  new_title = params[:title]
-  body = params[:body]
+  new_title = h(params[:title])
+  body = h(params[:body])
 
   File.rename("views/#{old_title}.markdown", "views/#{new_title}.markdown")
   file = File.open("views/#{new_title}.markdown", 'w')
@@ -49,4 +49,10 @@ delete '/memos/:title' do
   title = params[:title]
   File.delete("views/#{title}.markdown")
   redirect to('/')
+end
+
+helpers do
+  def h(text)
+    Rack::Utils.escape_html(text)
+  end
 end
