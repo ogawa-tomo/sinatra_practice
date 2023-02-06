@@ -18,14 +18,10 @@ end
 post '/memos' do
   title = params[:title]
   body = params[:body]
-  create_update_memo(params[:title], params[:body])
-
-  # file = File.open("views/#{title}.markdown", 'w')
-  # file.puts "## #{title}"
-  # file.puts body
-  # file.close
-
-  # redirect to("/memos/#{title}")
+  file = File.open("views/#{title}.markdown", 'w')
+  file.puts body
+  file.close
+  redirect to("/memos/#{title}")
 end
 
 get '/memos/:title/edit' do
@@ -38,13 +34,19 @@ get '/memos/:title/edit' do
 end
 
 patch '/memos/:title' do
-  create_update_memo(params[:title], params[:body])
-end
+  title = params[:title]
+  body = params[:body]
 
-def create_update_memo(title, body)
+  # タイトルを変更する場合はファイル名をリネームする処理が必要
+
   file = File.open("views/#{title}.markdown", 'w')
   file.puts body
   file.close
   redirect to("/memos/#{title}")
+
+end
+
+def create_update_memo(title, body)
+ 
 end
 
