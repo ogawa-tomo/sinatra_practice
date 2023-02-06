@@ -2,5 +2,11 @@
 
 <%= md %>
 
-<a href='<%= "/memos/#{@title}/edit" %>'>編集</a>
+<form method="get" action='<%= "/memos/#{@title}/edit" %>'>
+  <input type="submit" value="編集">
+</form>
+<form method="post" action='<%= "/memos/#{@title}" %>'>
+  <input type="hidden" name="_method" value="DELETE">
+  <input type="submit" value="削除">
+</form>
 <a href='/'>トップへ戻る</a>

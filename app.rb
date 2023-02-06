@@ -44,3 +44,9 @@ patch '/memos/:old_title' do
   file.close
   redirect to("/memos/#{new_title}")
 end
+
+delete '/memos/:title' do
+  title = params[:title]
+  File.delete("views/#{title}.markdown")
+  redirect to('/')
+end
