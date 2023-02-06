@@ -33,16 +33,16 @@ get '/memos/:title/edit' do
   erb :edit
 end
 
-patch '/memos/:title' do
-  title = params[:title]
+patch '/memos/:old_title' do
+  old_title = params[:old_title]
+  new_title = params[:title]
   body = params[:body]
 
-  # タイトルを変更する場合はファイル名をリネームする処理が必要
-
-  file = File.open("views/#{title}.markdown", 'w')
+  File.rename("views/#{old_title}.markdown", "views/#{new_title}.markdown")
+  file = File.open("views/#{new_title}.markdown", 'w')
   file.puts body
   file.close
-  redirect to("/memos/#{title}")
+  redirect to("/memos/#{new_title}")
 
 end
 
