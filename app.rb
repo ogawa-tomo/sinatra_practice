@@ -43,10 +43,4 @@ patch '/memos/:old_title' do
   file.puts body
   file.close
   redirect to("/memos/#{new_title}")
-
 end
-
-def create_update_memo(title, body)
- 
-end
-
