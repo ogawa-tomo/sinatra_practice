@@ -1,11 +1,11 @@
 # sinatra_practice
 
-## 環境構築
+## ローカルでの環境構築
 ```
 $ bundle install
 ```
 
-## 起動
+## ローカルでのサーバ起動
 ```
 $ bundle exec ruby app.rb
 ```
