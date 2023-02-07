@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'sinatra'
 require 'sinatra/reloader'
 
@@ -12,7 +14,7 @@ end
 
 get '/memos/:title' do
   @title = params[:title]
-  erb :memo_template, :locals => { :md => markdown(params[:title].to_sym) }
+  erb :memo_template, locals: { md: markdown(params[:title].to_sym) }
 end
 
 post '/memos' do
