@@ -1,11 +1,11 @@
-<h2><%= @title %></h2>
+<h2><%= @memo[:title] %></h2>
 
-<%= h(@body) %>
+<%= h(@memo[:body]) %>
 
-<form method="get" action='<%= "/memos/#{@title}/edit" %>'>
+<form method="get" action='<%= "/memos/#{@memo[:title]}/edit" %>'>
   <input type="submit" value="編集">
 </form>
-<form method="post" action='<%= "/memos/#{@title}" %>'>
+<form method="post" action='<%= "/memos/#{@memo[:title]}" %>'>
   <input type="hidden" name="_method" value="DELETE">
   <input type="submit" value="削除">
 </form>

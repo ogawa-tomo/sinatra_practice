@@ -13,9 +13,9 @@ get '/memos/new' do
 end
 
 get '/memos/:title' do
-  @title = params[:title]
-  File.open("views/#{@title}.txt", 'r') do |file|
-    @body = file.read
+  @memo = { title: params[:title] }
+  File.open("views/#{params[:title]}.txt", 'r') do |file|
+    @memo[:body] = file.read
   end
   erb :memo_template
 end
@@ -35,9 +35,9 @@ post '/memos' do
 end
 
 get '/memos/:title/edit' do
-  @title = params[:title]
+  @memo = { title: params[:title] }
   File.open("views/#{params[:title]}.txt", 'r') do |file|
-    @body = file.read
+    @memo[:body] = file.read
   end
   erb :edit
 end
