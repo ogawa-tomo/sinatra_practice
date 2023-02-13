@@ -20,18 +20,18 @@ end
 post '/memos' do
   title = h(params[:title])
   body = h(params[:body])
-  file = File.open("views/#{title}.md", 'w')
-  file.puts body
-  file.close
+  File.open("views/#{title}.md", 'w') do |file|
+    file.puts body
+  end
   redirect to("/memos/#{title}")
 end
 
 get '/memos/:title/edit' do
   file_path = "views/#{params[:title]}.md"
   @title = File.basename(Dir.glob(file_path)[0]).chomp('.md')
-  file = File.open(file_path, 'r')
-  @body = file.read
-  file.close
+  File.open(file_path, 'r') do |file|
+    @body = file.read
+  end
   erb :edit
 end
 
@@ -41,9 +41,9 @@ patch '/memos/:old_title' do
   body = h(params[:body])
 
   File.rename("views/#{old_title}.md", "views/#{new_title}.md")
-  file = File.open("views/#{new_title}.md", 'w')
-  file.puts body
-  file.close
+  File.open("views/#{new_title}.md", 'w') do |file|
+    file.puts body
+  end
   redirect to("/memos/#{new_title}")
 end
 
