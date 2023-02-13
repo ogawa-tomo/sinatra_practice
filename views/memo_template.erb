@@ -1,6 +1,6 @@
 <h2><%= @title %></h2>
 
-<%= md %>
+<%= h(@body) %>
 
 <form method="get" action='<%= "/memos/#{@title}/edit" %>'>
   <input type="submit" value="編集">

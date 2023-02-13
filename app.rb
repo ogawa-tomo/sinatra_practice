@@ -14,7 +14,10 @@ end
 
 get '/memos/:title' do
   @title = params[:title]
-  erb :memo_template, locals: { md: markdown(params[:title].to_sym) }
+  File.open("views/#{@title}.md", 'r') do |file|
+    @body = file.read
+  end
+  erb :memo_template
 end
 
 post '/memos' do
@@ -24,7 +27,7 @@ post '/memos' do
     redirect to("/memos/new")
   end
 
-  body = h(params[:body])
+  body = params[:body]
   File.open("views/#{title}.md", 'w') do |file|
     file.puts body
   end
@@ -48,7 +51,7 @@ patch '/memos/:old_title' do
     redirect to("/memos/#{old_title}/edit")
   end
 
-  body = h(params[:body])
+  body = params[:body]
 
   File.rename("views/#{old_title}.md", "views/#{new_title}.md")
   File.open("views/#{new_title}.md", 'w') do |file|
