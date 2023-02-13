@@ -4,7 +4,7 @@ require 'sinatra'
 require 'sinatra/reloader'
 
 get '/' do
-  @memos = Dir.glob('views/*.markdown').map { |f| File.basename(f).chomp('.markdown') }
+  @memos = Dir.glob('views/*.md').map { |f| File.basename(f).chomp('.md') }
   erb :index
 end
 
@@ -20,15 +20,15 @@ end
 post '/memos' do
   title = h(params[:title])
   body = h(params[:body])
-  file = File.open("views/#{title}.markdown", 'w')
+  file = File.open("views/#{title}.md", 'w')
   file.puts body
   file.close
   redirect to("/memos/#{title}")
 end
 
 get '/memos/:title/edit' do
-  file_path = "views/#{params[:title]}.markdown"
-  @title = File.basename(Dir.glob(file_path)[0]).chomp('.markdown')
+  file_path = "views/#{params[:title]}.md"
+  @title = File.basename(Dir.glob(file_path)[0]).chomp('.md')
   file = File.open(file_path, 'r')
   @body = file.read
   file.close
@@ -40,8 +40,8 @@ patch '/memos/:old_title' do
   new_title = h(params[:title])
   body = h(params[:body])
 
-  File.rename("views/#{old_title}.markdown", "views/#{new_title}.markdown")
-  file = File.open("views/#{new_title}.markdown", 'w')
+  File.rename("views/#{old_title}.md", "views/#{new_title}.md")
+  file = File.open("views/#{new_title}.md", 'w')
   file.puts body
   file.close
   redirect to("/memos/#{new_title}")
@@ -49,7 +49,7 @@ end
 
 delete '/memos/:title' do
   title = params[:title]
-  File.delete("views/#{title}.markdown")
+  File.delete("views/#{title}.md")
   redirect to('/')
 end
 
