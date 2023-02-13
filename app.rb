@@ -18,7 +18,12 @@ get '/memos/:title' do
 end
 
 post '/memos' do
-  title = h(params[:title])
+  title = params[:title]
+
+  if include_letters_not_available_in_title?(title)
+    redirect to("/memos/new")
+  end
+
   body = h(params[:body])
   File.open("views/#{title}.md", 'w') do |file|
     file.puts body
@@ -37,7 +42,12 @@ end
 
 patch '/memos/:old_title' do
   old_title = params[:old_title]
-  new_title = h(params[:title])
+  new_title = params[:title]
+
+  if include_letters_not_available_in_title?(new_title)
+    redirect to("/memos/#{old_title}/edit")
+  end
+
   body = h(params[:body])
 
   File.rename("views/#{old_title}.md", "views/#{new_title}.md")
@@ -51,6 +61,10 @@ delete '/memos/:title' do
   title = params[:title]
   File.delete("views/#{title}.md")
   redirect to('/')
+end
+
+def include_letters_not_available_in_title?(title)
+  '\/:*?"<>|'.split('').any? { |t| title.include?(t) }
 end
 
 helpers do
