@@ -4,7 +4,7 @@ require 'sinatra'
 require 'sinatra/reloader'
 
 get '/' do
-  @memos = Dir.glob('views/*.txt').map { |f| File.basename(f).chomp('.txt') }
+  @memos = Dir.glob('views/*.txt').sort_by { |f| -File.mtime(f).to_i }.map { |f| File.basename(f).chomp('.txt') }
   erb :index
 end
 
