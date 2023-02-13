@@ -35,9 +35,8 @@ post '/memos' do
 end
 
 get '/memos/:title/edit' do
-  file_path = "views/#{params[:title]}.txt"
-  @title = File.basename(Dir.glob(file_path)[0]).chomp('.txt')
-  File.open(file_path, 'r') do |file|
+  @title = params[:title]
+  File.open("views/#{params[:title]}.txt", 'r') do |file|
     @body = file.read
   end
   erb :edit
