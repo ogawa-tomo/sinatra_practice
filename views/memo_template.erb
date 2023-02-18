@@ -1,0 +1,12 @@
+<h2><%= @memo[:title] %></h2>
+
+<%= h(@memo[:body]) %>
+
+<form method="get" action='<%= "/memos/#{@memo[:title]}/edit" %>'>
+  <input type="submit" value="編集">
+</form>
+<form method="post" action='<%= "/memos/#{@memo[:title]}" %>'>
+  <input type="hidden" name="_method" value="DELETE">
+  <input type="submit" value="削除">
+</form>
+<a href='/'>トップへ戻る</a>
