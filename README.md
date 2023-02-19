@@ -13,7 +13,7 @@ CREATE TABLE memo (
   body text,
   created_at timestamp,
   updated_at timestamp
-)
+);
 ```
 ディレクトリ直下に`.env`ファイルを作成し、DBの接続情報を記入しておく。
 ```
