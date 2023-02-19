@@ -3,8 +3,17 @@
 require 'sinatra'
 require 'sinatra/reloader'
 require 'pg'
+require 'dotenv'
 
-CONN = PG::Connection.new(host: 'localhost', port: 5432, dbname: 'sinatra_kihon', user: 'sinatra', password: 'sukasuka')
+Dotenv.load
+
+CONN = PG::Connection.new(
+  host: ENV['DB_HOST'],
+  port: ENV['DB_PORT'],
+  dbname: ENV['DB_NAME'],
+  user: ENV['DB_USER'],
+  password: ENV['DB_PASS']
+)
 
 get '/' do
   @memos = CONN.exec('select * from memo order by updated_at desc;')
