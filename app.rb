@@ -7,7 +7,7 @@ require 'pg'
 CONN = PG::Connection.new(host: 'localhost', port: 5432, dbname: 'sinatra_kihon', user: 'sinatra', password: 'sukasuka')
 
 get '/' do
-  @memos = CONN.exec('select * from memo;')
+  @memos = CONN.exec('select * from memo order by updated_at desc;')
   erb :index
 end
 
@@ -23,7 +23,7 @@ end
 post '/memos' do
   title = params[:title]
   body = params[:body]
-  result = CONN.exec("insert into memo (title, body) values (\'#{title}\', \'#{body}\') returning id;")
+  result = CONN.exec("insert into memo (title, body, created_at, updated_at) values (\'#{title}\', \'#{body}\', \'#{Time.now}\', \'#{Time.now}\') returning id;")
   redirect to("/memos/#{result[0]['id']}")
 end
 
@@ -33,7 +33,7 @@ get '/memos/:id/edit' do
 end
 
 patch '/memos/:id' do
-  CONN.exec("update memo set title = \'#{params[:title]}\', body = \'#{params[:body]}\' where id = #{params[:id]};")
+  CONN.exec("update memo set title = \'#{params[:title]}\', body = \'#{params[:body]}\', updated_at = \'#{Time.now}\' where id = #{params[:id]};")
   redirect to("/memos/#{params[:id]}")
 end
 
