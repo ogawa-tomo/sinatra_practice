@@ -1,4 +1,4 @@
-<form action="/memos/<%= @memo['title'].force_encoding('UTF-8') %>" method="POST">
+<form action="/memos/<%= @memo['id'] %>" method="POST">
   <input type="hidden" name="_method" value="PATCH">
   <div>
     <label for="title">タイトル</label><br>

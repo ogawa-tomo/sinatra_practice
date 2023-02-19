@@ -3,7 +3,7 @@
 <ul>
   <% @memos.each do |memo| %>
     <% title = memo['title'].force_encoding('UTF-8') %>
-    <li><a href='<%= "memos/#{title}" %>'><%= title %></a></li>
+    <li><a href='<%= "memos/#{memo['id']}" %>'><%= title %></a></li>
   <% end %>
 </ul>
 

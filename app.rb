@@ -15,34 +15,30 @@ get '/memos/new' do
   erb :new
 end
 
-get '/memos/:title' do
-  @memo = CONN.exec("select * from memo where title = \'#{params[:title]}\'")[0]
+get '/memos/:id' do
+  @memo = CONN.exec("select * from memo where id = \'#{params[:id]}\'")[0]
   erb :memo_template
 end
 
 post '/memos' do
   title = params[:title]
   body = params[:body]
-  CONN.exec("insert into memo (title, body) values (\'#{title}\', \'#{body}\');")
-  redirect to("/memos/#{title}")
+  result = CONN.exec("insert into memo (title, body) values (\'#{title}\', \'#{body}\') returning id;")
+  redirect to("/memos/#{result[0]['id']}")
 end
 
-get '/memos/:title/edit' do
-  @memo = CONN.exec("select * from memo where title = \'#{params[:title]}\'")[0]
+get '/memos/:id/edit' do
+  @memo = CONN.exec("select * from memo where id = \'#{params[:id]}\'")[0]
   erb :edit
 end
 
-patch '/memos/:old_title' do
-  old_title = params[:old_title]
-  new_title = params[:title]
-  body = params[:body]
-  CONN.exec("update memo set title = \'#{new_title}\', body = \'#{body}\' where title = \'#{old_title}\';")
-  redirect to("/memos/#{new_title}")
+patch '/memos/:id' do
+  CONN.exec("update memo set title = \'#{params[:title]}\', body = \'#{params[:body]}\' where id = #{params[:id]};")
+  redirect to("/memos/#{params[:id]}")
 end
 
-delete '/memos/:title' do
-  title = params[:title]
-  CONN.exec("delete from memo where title = \'#{title}\';")
+delete '/memos/:id' do
+  CONN.exec("delete from memo where id = #{params[:id]};")
   redirect to('/')
 end
 

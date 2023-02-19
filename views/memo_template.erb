@@ -2,10 +2,10 @@
 
 <%= h(@memo['body'].force_encoding('UTF-8')) %>
 
-<form method="get" action='<%= "/memos/#{@memo['title'].force_encoding('UTF-8')}/edit" %>'>
+<form method="get" action='<%= "/memos/#{@memo['id']}/edit" %>'>
   <input type="submit" value="編集">
 </form>
-<form method="post" action='<%= "/memos/#{@memo['title'].force_encoding('UTF-8')}" %>'>
+<form method="post" action='<%= "/memos/#{@memo['id']}" %>'>
   <input type="hidden" name="_method" value="DELETE">
   <input type="submit" value="削除">
 </form>
