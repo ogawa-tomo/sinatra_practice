@@ -2,9 +2,12 @@
 
 require 'sinatra'
 require 'sinatra/reloader'
+require 'pg'
+
+CONN = PG::Connection.new(host: 'localhost', port: 5432, dbname: 'sinatra_kihon', user: 'sinatra', password: 'sukasuka')
 
 get '/' do
-  @memos = Dir.glob('views/*.txt').sort_by { |f| -File.mtime(f).to_i }.map { |f| File.basename(f).chomp('.txt') }
+  @memos = CONN.exec('select * from memo;')
   erb :index
 end
 
@@ -13,56 +16,34 @@ get '/memos/new' do
 end
 
 get '/memos/:title' do
-  @memo = { title: params[:title] }
-  File.open("views/#{params[:title]}.txt", 'r') do |file|
-    @memo[:body] = file.read
-  end
+  @memo = CONN.exec("select * from memo where title = \'#{params[:title]}\'")[0]
   erb :memo_template
 end
 
 post '/memos' do
   title = params[:title]
-
-  redirect to('/memos/new') if include_letters_not_available_in_title?(title)
-
   body = params[:body]
-  File.open("views/#{title}.txt", 'w') do |file|
-    file.puts body
-  end
+  CONN.exec("insert into memo (title, body) values (\'#{title}\', \'#{body}\');")
   redirect to("/memos/#{title}")
 end
 
 get '/memos/:title/edit' do
-  @memo = { title: params[:title] }
-  File.open("views/#{params[:title]}.txt", 'r') do |file|
-    @memo[:body] = file.read
-  end
+  @memo = CONN.exec("select * from memo where title = \'#{params[:title]}\'")[0]
   erb :edit
 end
 
 patch '/memos/:old_title' do
   old_title = params[:old_title]
   new_title = params[:title]
-
-  redirect to("/memos/#{old_title}/edit") if include_letters_not_available_in_title?(new_title)
-
   body = params[:body]
-
-  File.rename("views/#{old_title}.txt", "views/#{new_title}.txt")
-  File.open("views/#{new_title}.txt", 'w') do |file|
-    file.puts body
-  end
+  CONN.exec("update memo set title = \'#{new_title}\', body = \'#{body}\' where title = \'#{old_title}\';")
   redirect to("/memos/#{new_title}")
 end
 
 delete '/memos/:title' do
   title = params[:title]
-  File.delete("views/#{title}.txt")
+  CONN.exec("delete from memo where title = \'#{title}\';")
   redirect to('/')
-end
-
-def include_letters_not_available_in_title?(title)
-  '\/:*?"<>|'.split('').any? { |t| title.include?(t) }
 end
 
 helpers do
