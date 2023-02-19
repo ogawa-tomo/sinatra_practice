@@ -2,8 +2,8 @@
 
 source 'https://rubygems.org'
 
-gem 'erb_lint'
 gem 'dotenv'
+gem 'erb_lint'
 gem 'pg'
 gem 'puma'
 gem 'redcarpet'
