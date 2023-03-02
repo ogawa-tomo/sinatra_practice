@@ -4,6 +4,25 @@
 ```
 $ bundle install
 ```
+## データベースとの連携
+PostgreSQLで下記のようにmemoテーブルを用意しておく。
+```
+CREATE TABLE memo (
+  id bigserial,
+  title text,
+  body text,
+  created_at timestamp,
+  updated_at timestamp
+);
+```
+ディレクトリ直下に`.env`ファイルを作成し、DBの接続情報を記入しておく。
+```
+DB_HOST=localhost
+DB_PORT=5432
+DB_NAME=db_name
+DB_USER=db_user
+DB_PASS=password
+```
 
 ## ローカルでのサーバ起動
 ```

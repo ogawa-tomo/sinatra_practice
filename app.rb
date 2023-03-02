@@ -2,9 +2,21 @@
 
 require 'sinatra'
 require 'sinatra/reloader'
+require 'pg'
+require 'dotenv'
+
+Dotenv.load
+
+CONN = PG::Connection.new(
+  host: ENV['DB_HOST'],
+  port: ENV['DB_PORT'],
+  dbname: ENV['DB_NAME'],
+  user: ENV['DB_USER'],
+  password: ENV['DB_PASS']
+)
 
 get '/' do
-  @memos = Dir.glob('views/*.txt').sort_by { |f| -File.mtime(f).to_i }.map { |f| File.basename(f).chomp('.txt') }
+  @memos = CONN.exec('SELECT * FROM memo ORDER BY updated_at DESC;')
   erb :index
 end
 
@@ -12,57 +24,32 @@ get '/memos/new' do
   erb :new
 end
 
-get '/memos/:title' do
-  @memo = { title: params[:title] }
-  File.open("views/#{params[:title]}.txt", 'r') do |file|
-    @memo[:body] = file.read
-  end
+get '/memos/:id' do
+  @memo = CONN.exec_params('SELECT * FROM memo WHERE id = $1', [params[:id]])[0]
   erb :memo_template
 end
 
 post '/memos' do
   title = params[:title]
-
-  redirect to('/memos/new') if include_letters_not_available_in_title?(title)
-
   body = params[:body]
-  File.open("views/#{title}.txt", 'w') do |file|
-    file.puts body
-  end
-  redirect to("/memos/#{title}")
+  now = Time.now
+  result = CONN.exec_params('INSERT INTO memo (title, body, created_at, updated_at) VALUES ($1, $2, $3, $4) RETURNING id;', [title, body, now, now])
+  redirect to("/memos/#{result[0]['id']}")
 end
 
-get '/memos/:title/edit' do
-  @memo = { title: params[:title] }
-  File.open("views/#{params[:title]}.txt", 'r') do |file|
-    @memo[:body] = file.read
-  end
+get '/memos/:id/edit' do
+  @memo = CONN.exec_params('SELECT * FROM memo WHERE id = $1', [params[:id]])[0]
   erb :edit
 end
 
-patch '/memos/:old_title' do
-  old_title = params[:old_title]
-  new_title = params[:title]
-
-  redirect to("/memos/#{old_title}/edit") if include_letters_not_available_in_title?(new_title)
-
-  body = params[:body]
-
-  File.rename("views/#{old_title}.txt", "views/#{new_title}.txt")
-  File.open("views/#{new_title}.txt", 'w') do |file|
-    file.puts body
-  end
-  redirect to("/memos/#{new_title}")
+patch '/memos/:id' do
+  CONN.exec_params('UPDATE memo SET title = $1, body = $2, updated_at = $3 WHERE id = $4;', [params[:title], params[:body], Time.now, params[:id]])
+  redirect to("/memos/#{params[:id]}")
 end
 
-delete '/memos/:title' do
-  title = params[:title]
-  File.delete("views/#{title}.txt")
+delete '/memos/:id' do
+  CONN.exec_params('DELETE FROM memo WHERE id = $1;', [params[:id]])
   redirect to('/')
-end
-
-def include_letters_not_available_in_title?(title)
-  '\/:*?"<>|'.split('').any? { |t| title.include?(t) }
 end
 
 helpers do

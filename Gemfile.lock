@@ -23,6 +23,7 @@ GEM
     builder (3.2.4)
     concurrent-ruby (1.2.0)
     crass (1.0.6)
+    dotenv (2.8.1)
     erb_lint (0.3.1)
       activesupport
       better_html (>= 2.0.1)
@@ -51,6 +52,7 @@ GEM
     parallel (1.22.1)
     parser (3.2.0.0)
       ast (~> 2.4.1)
+    pg (1.4.5)
     puma (6.0.2)
       nio4r (~> 2.0)
     racc (1.6.2)
@@ -108,7 +110,9 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
+  dotenv
   erb_lint
+  pg
   puma
   redcarpet
   rubocop-fjord

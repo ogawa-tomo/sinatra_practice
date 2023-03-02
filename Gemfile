@@ -2,7 +2,9 @@
 
 source 'https://rubygems.org'
 
+gem 'dotenv'
 gem 'erb_lint'
+gem 'pg'
 gem 'puma'
 gem 'redcarpet'
 gem 'sinatra'
