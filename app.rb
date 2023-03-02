@@ -32,7 +32,8 @@ end
 post '/memos' do
   title = params[:title]
   body = params[:body]
-  result = CONN.exec_params('INSERT INTO memo (title, body, created_at, updated_at) VALUES ($1, $2, $3, $4) RETURNING id;', [title, body, Time.now, Time.now])
+  now = Time.now
+  result = CONN.exec_params('INSERT INTO memo (title, body, created_at, updated_at) VALUES ($1, $2, $3, $4) RETURNING id;', [title, body, now, now])
   redirect to("/memos/#{result[0]['id']}")
 end
 
