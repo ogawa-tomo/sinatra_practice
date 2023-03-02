@@ -2,11 +2,11 @@
   <input type="hidden" name="_method" value="PATCH">
   <div>
     <label for="title">タイトル</label><br>
-    <input name="title" id="body" value='<%= @memo['title'].force_encoding('UTF-8') %>'>
+    <input name="title" id="body" value='<%= @memo['title'] %>'>
   </div>
   <div>
     <label for="body">内容</label><br>
-    <textarea name="body" id="to"><%= @memo['body'].force_encoding('UTF-8') %></textarea>
+    <textarea name="body" id="to"><%= @memo['body'] %></textarea>
   </div>
   <div>
     <button>保存</button>

@@ -1,6 +1,6 @@
-<h2><%= @memo['title'].force_encoding('UTF-8') %></h2>
+<h2><%= @memo['title'] %></h2>
 
-<%= h(@memo['body'].force_encoding('UTF-8')) %>
+<%= h(@memo['body']) %>
 
 <form method="get" action='<%= "/memos/#{@memo['id']}/edit" %>'>
   <input type="submit" value="編集">
