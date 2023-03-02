@@ -8,7 +8,7 @@ $ bundle install
 PostgreSQLで下記のようにmemoテーブルを用意しておく。
 ```
 CREATE TABLE memo (
-  id bigseriarl,
+  id bigserial,
   title text,
   body text,
   created_at timestamp,
