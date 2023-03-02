@@ -17,11 +17,11 @@ CREATE TABLE memo (
 ```
 ディレクトリ直下に`.env`ファイルを作成し、DBの接続情報を記入しておく。
 ```
-DB_HOST = 'localhost'
-DB_PORT = 5432
-DB_NAME = 'db_name'
-DB_USER = 'db_user'
-DB_PASS = 'password'
+DB_HOST=localhost
+DB_PORT=5432
+DB_NAME=db_name
+DB_USER=db_user
+DB_PASS=password
 ```
 
 ## ローカルでのサーバ起動
